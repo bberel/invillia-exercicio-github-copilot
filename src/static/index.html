@@ -46,5 +46,44 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/activities")
+          .then((response) => response.json())
+          .then((data) => {
+            const activitiesList = document.getElementById("activities-list");
+            activitiesList.innerHTML = "";
+            const activitySelect = document.getElementById("activity");
+
+            for (const [activityName, activityDetails] of Object.entries(data)) {
+              const activityCard = document.createElement("div");
+              activityCard.className = "activity-card";
+
+              const activityTitle = document.createElement("h4");
+              activityTitle.textContent = activityName;
+              activityCard.appendChild(activityTitle);
+
+              const activityDescription = document.createElement("p");
+              activityDescription.textContent = activityDetails.description;
+              activityCard.appendChild(activityDescription);
+
+              const activitySchedule = document.createElement("p");
+              activitySchedule.textContent = `Schedule: ${activityDetails.schedule}`;
+              activityCard.appendChild(activitySchedule);
+
+              const activityParticipants = document.createElement("p");
+              activityParticipants.textContent = `Participants: ${activityDetails.participants.join(", ")}`;
+              activityCard.appendChild(activityParticipants);
+
+              activitiesList.appendChild(activityCard);
+
+              const option = document.createElement("option");
+              option.value = activityName;
+              option.textContent = activityName;
+              activitySelect.appendChild(option);
+            }
+          });
+      });
+    </script>
   </body>
 </html>
